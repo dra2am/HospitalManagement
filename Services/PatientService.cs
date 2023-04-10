@@ -1,7 +1,6 @@
 ﻿using HospitalManagement.Data;
 using HospitalManagement.Models;
 using Microsoft.EntityFrameworkCore;
-using BCrypt.Net;
 
 namespace HospitalManagement.Services
 {
@@ -16,6 +15,7 @@ namespace HospitalManagement.Services
         }
 
         //Get Patient by first and last name
+        //add where doctor id...so doctors can only pull up patients they have
         public IEnumerable<Patient>? GetPatient(string firstName, string lastName) 
         {
             //select * from Patients where...
@@ -39,6 +39,27 @@ namespace HospitalManagement.Services
             return _context.Patients.SingleOrDefault(patient => patient.PatientSSN == ssn);
         }
 
+        //Fetch patient by email, check associated password against the one entered
+        public Patient SignInPatient(string email, string password) 
+        {
+            Patient? patient = GetPatientEmail(email); 
+
+            if (patient == null) 
+            {
+                throw new Exception("PatientService.SignInPatient: Incorrect username or password");
+            }
+
+            //fetch password and compare to the password entered
+           bool isMatch = BCrypt.Net.BCrypt.Verify(password, patient.PatientPassword);
+
+            if (!isMatch)
+            {
+                throw new Exception("PatientService.SignInPatient: Incorrect username or password");
+            }
+
+            return patient;
+        }
+
         //Add Patients to Database --add admin function
         public Patient CreatePatient(Patient newPatient)
         {
@@ -48,7 +69,7 @@ namespace HospitalManagement.Services
 
             if (!isUnique)
             {
-                throw new Exception("This patient already exists in the system");
+                throw new Exception("PatientService.CreatePatient: This patient already exists in the system");
             }
 
             //add and save patient

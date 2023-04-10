@@ -2,11 +2,12 @@
 using HospitalManagement.Services;
 using HospitalManagement.Models;
 
+//todo: update to use ASP.Net authorization
 namespace HospitalManagement.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PatientController : ControllerBase
+    public class PatientController : Controller
     {
         //inject service
         PatientService _patientService;
@@ -16,7 +17,7 @@ namespace HospitalManagement.Controllers
             _patientService = patientService;
         }
 
-        [HttpGet("email/{email}")]
+        [HttpGet("email")]
         public ActionResult<Patient> GetPatientByEmail(string email) 
         { 
             var patient = _patientService.GetPatientEmail(email);
@@ -31,7 +32,7 @@ namespace HospitalManagement.Controllers
             }
         }
 
-        [HttpGet("id/{id}")]
+        [HttpGet("id")]
         public ActionResult<Patient> GetPatientById(int id)
         {
             var patient = _patientService.GetPatientById(id);
@@ -46,7 +47,8 @@ namespace HospitalManagement.Controllers
             }
         }
 
-        [HttpGet("name/{first}/{last}")]
+        //add doctor id to this
+        [HttpGet("name")]
         public ActionResult<IEnumerable<Patient>> GetPatientByName(string firstName, string lastName) 
         {
             var patient = _patientService.GetPatient(firstName, lastName);
@@ -64,11 +66,14 @@ namespace HospitalManagement.Controllers
         [HttpPost("addPatient")]
         public IActionResult AddPatient(Patient newPatient)
         {
-            //checks if Form values are bound to the Model + if model validations pass
-            //if (!ModelState.IsValid){}
-
             var createdPatient = _patientService.CreatePatient(newPatient);
             return CreatedAtAction(nameof(GetPatientById), new { id = createdPatient.PatientId }, createdPatient);
         }
+
+        //[HttPost("signIn")]
+        //public IActionResult PatientSignIn(string email, string password)
+        //{
+
+        //}
     }
 }

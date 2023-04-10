@@ -10,6 +10,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddControllers();
 //add services (change this for proper dependency injection with an interface.)
 builder.Services.AddScoped<PatientService>();
+//this is for swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
