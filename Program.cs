@@ -1,5 +1,7 @@
 using HospitalManagement.Data;
+using HospitalManagement.Models;
 using HospitalManagement.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,17 @@ builder.Services.AddSwaggerGen();
 //SQL connection, connection string from appsettings.json
 builder.Services.AddDbContext<HospitalContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//Add Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<HospitalContext>()
+    .AddDefaultTokenProviders();
+
+//auth
+//builder.Services.AddAuthorization(options =>
+//{
+
+//});
 
 var app = builder.Build();
 

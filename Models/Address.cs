@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HospitalManagement.Models
 {
-    public class Address
+    public class Address 
     {
         public int AddressID { get; set; }  
 
-        [ForeignKey("PatientId")]
+        [ForeignKey("Id")]
         public Patient? Patient { get; set; }
         [Required] public string? Street { get; set; }
         [Required] public string? City { get; set; }
