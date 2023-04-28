@@ -1,5 +1,6 @@
 ﻿using HospitalManagement.Data;
 using HospitalManagement.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagement.Services
@@ -7,11 +8,18 @@ namespace HospitalManagement.Services
     public class PatientService
     {
         //dependency injection for context
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly HospitalContext _context;
+        //get data from appsettings
+        private readonly IConfiguration _configuration;
 
-        public PatientService(HospitalContext context) 
+        public PatientService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, HospitalContext context, IConfiguration configuration) 
         { 
+            _userManager = userManager;
+            _roleManager = roleManager;     
             _context = context;
+
         }
 
         //Get Patient by first and last name
@@ -23,10 +31,10 @@ namespace HospitalManagement.Services
         //    && patient.LastName == lastName);
         //}
 
-        //public Patient? GetPatientById(string id)
-        //{
-        //    return _context.Patients.SingleOrDefault(patient => patient.Id == id);
-        //}
+        public Patient? GetPatientById(int id)
+        {
+            return _context.Patients.SingleOrDefault(patient => patient.PatientId == id);
+        }
 
         //public Patient? GetPatientEmail(string? email)
         //{
@@ -81,7 +89,7 @@ namespace HospitalManagement.Services
 
         //    //try catch here?
         //    _context.SaveChanges();
-            
+
         //    return newPatient;
         //}
     }

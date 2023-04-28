@@ -9,13 +9,13 @@ namespace HospitalManagement.Controllers
     [Route("[controller]")]
     public class PatientController : Controller
     {
-        ////inject service
-        //PatientService _patientService;
+        //inject service
+        PatientService _patientService;
 
-        //public PatientController (PatientService patientService) 
-        //{ 
-        //    _patientService = patientService;
-        //}
+        public PatientController (PatientService patientService) 
+        { 
+            _patientService = patientService;
+        }
 
         //[HttpGet("email")]
         //public ActionResult<Patient> GetPatientByEmail(string email) 
@@ -32,20 +32,20 @@ namespace HospitalManagement.Controllers
         //    }
         //}
 
-        //[HttpGet("id")]
-        //public ActionResult<Patient> GetPatientById(string id)
-        //{
-        //    var patient = _patientService.GetPatientById(id);
+        [HttpGet("id")]
+        public ActionResult<Patient> GetPatientById(int id)
+        {
+            var patient = _patientService.GetPatientById(id);
 
-        //    if (patient != null)
-        //    {
-        //        return patient;
-        //    }
-        //    else
-        //    {
-        //        return NotFound();
-        //    }
-        //}
+            if (patient != null)
+            {
+                return patient;
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
         ////add doctor id to this
         //[HttpGet("name")]
