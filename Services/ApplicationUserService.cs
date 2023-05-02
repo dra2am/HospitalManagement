@@ -43,11 +43,13 @@ namespace HospitalManagement.Services
                 FirstName = addPatientVM.FirstName,
                 LastName = addPatientVM.LastName,
                 Email = addPatientVM.Email,
+                UserName = addPatientVM.Email,
                 PasswordHash = hashedPass,
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
 
             Task<IdentityResult> result = _userManager.CreateAsync(newUser, hashedPass);
+            Console.WriteLine("Result is: " + result.ToString());
             return result.Result;
         }
 
