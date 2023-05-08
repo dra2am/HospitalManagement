@@ -47,6 +47,32 @@ namespace HospitalManagement.Controllers
             }
         }
 
+        [HttpPost("loginUser")]
+        public IActionResult LoginAppUser([FromBody] LoginPatientVM loginPatientVM)
+        {
+            if (!ModelState.IsValid) 
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var isUserLoggedIn = _applicationUserService.LoginAppUser(loginPatientVM);
+
+                if(isUserLoggedIn.Result)
+                {
+                    return Ok("Signed In");
+                }
+
+            } catch (Exception ex)
+            {
+                Console.WriteLine("ApplicationController.LoginAppUser: "+ex.Message);
+                return BadRequest(ex.Message);
+            }
+
+            return Unauthorized("Incorrect user name or password");
+        }
+
 
     }
 }
