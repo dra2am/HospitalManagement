@@ -13,9 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 //add controllers then map on line 79
 builder.Services.AddControllers();
-//add services (change this for proper dependency injection with an interface.)
-builder.Services.AddScoped<PatientService>();
-builder.Services.AddScoped<ApplicationUserService>();
+//add services 
+builder.Services.AddScoped<IApplicationUserService, ApplicationUserService>();
 //this is for swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

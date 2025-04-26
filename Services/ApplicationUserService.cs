@@ -8,7 +8,7 @@ using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace HospitalManagement.Services
 {
-    public class ApplicationUserService
+    public class ApplicationUserService : IApplicationUserService
     {
         //dependency injection for context
         private readonly UserManager<ApplicationUser> _userManager;
