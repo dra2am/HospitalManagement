@@ -23,8 +23,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<HospitalContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//Add Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentityCore<ApplicationUser>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<HospitalContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddIdentityCore<ApplicationUserDoctor>()
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<HospitalContext>()
     .AddDefaultTokenProviders();
 
@@ -35,7 +40,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddJwtBearer(options =>
+    .AddJwtBearer("ApplicationUser", options =>
 {
     options.SaveToken = true;
     options.RequireHttpsMetadata = false;
@@ -48,6 +53,22 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = builder.Configuration["JWT:Audience"]
         
+    };
+}) 
+    //todo: differentiate user types
+    .AddJwtBearer("ApplicationUserDoctor", options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JWT:Secret"])),
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWT:Audience"]
+
     };
 });
 

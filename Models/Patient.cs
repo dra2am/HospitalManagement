@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HospitalManagement.Models
 {
-    //email,phone, and pass are provided by parent class
     [Index(nameof(PatientSSN), IsUnique=true)]
     public class Patient 
     {
@@ -27,7 +26,7 @@ namespace HospitalManagement.Models
         {
             Female,
             Male,
-            Other
+            NonBinary,
         } 
     }
 }
